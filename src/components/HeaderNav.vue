@@ -18,7 +18,7 @@
           >
         </ul>
         <div
-          v-if="user"
+          v-if="user && !mobile"
           class="profile"
           ref="profile"
           @click="toggleProfileMenu"
@@ -63,6 +63,16 @@
     </div>
     <Transition name="mobile-nav">
       <ul class="mobile-nav" v-show="mobileNav">
+        <div class="info" v-if="user">
+          <p class="initials">{{ storeState.profileInitials }}</p>
+          <div class="right">
+            <p>
+              {{ storeState.profileFirstName }}
+              {{ storeState.profileLastName }}
+            </p>
+            <p>{{ storeState.profileEmail }}</p>
+          </div>
+        </div>
         <router-link class="link" :to="{ name: 'home' }">Home</router-link>
         <router-link class="link" :to="{ name: 'blogs' }">Blogs</router-link>
         <router-link v-if="admin" class="link" :to="{ name: 'create-post' }"
@@ -71,6 +81,12 @@
         <router-link v-if="!user" class="link" :to="{ name: 'login' }"
           >Login/Register</router-link
         >
+        <router-link v-if="admin" :to="{ name: 'admin' }" class="link">
+          Admin
+        </router-link>
+        <div v-if="user" @click="logout" class="link">
+          <p>Logout</p>
+        </div>
       </ul>
     </Transition>
   </header>
@@ -310,6 +326,36 @@ header {
       color: white;
       &:hover {
         color: #1eb8b8;
+      }
+    }
+    .info {
+      display: flex;
+      align-items: center;
+      .initials {
+        position: initial;
+        width: 40px;
+        height: 40px;
+        background-color: white;
+        color: #303030;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        text-transform: uppercase;
+      }
+
+      .right {
+        flex: 1;
+        color: white;
+        margin-left: 12px;
+
+        p:nth-of-type(1) {
+          font-size: 14px;
+        }
+
+        p:nth-of-type(2) {
+          font-size: 12px;
+        }
       }
     }
   }
